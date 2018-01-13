@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace aspnetCoreReactTemplate
+namespace HPHR.API
 {
     /*
         Middleware that will rewrite (not redirect!) nested SPA page requests to the SPA root path.

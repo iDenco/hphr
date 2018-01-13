@@ -1,5 +1,5 @@
-﻿using Xunit;
-using app = aspnetCoreReactTemplate;
+using Xunit;
+using app = HPHR.ApplicationCore;
 
 namespace Tests.Unit
 {

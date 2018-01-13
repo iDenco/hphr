@@ -1,4 +1,4 @@
-﻿using Xunit;
+using Xunit;
 
 namespace Tests
 {
@@ -7,7 +7,7 @@ namespace Tests
         [Fact]
         public void Test1()
         {
-            var contact = new aspnetCoreReactTemplate.Models.Contact();
+            var contact = new HPHR.ApplicationCore.Models.Contact();
             Assert.True(string.IsNullOrEmpty(contact.Email));
         }
     }

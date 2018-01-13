@@ -22,7 +22,7 @@ export class SignIn extends React.Component<RouteComponentProps<any>, any> {
         this.setState({ errors: null, initialLoad: false });
         authService.signIn(this.refs.username.value, this.refs.password.value).then(response => {
             if (!response.is_error) {
-                this.props.history.push(RoutePaths.Contacts);
+                this.props.history.push(RoutePaths.Employees);
             } else {
                 this.setState({ error: response.error_content.error_description });
             }

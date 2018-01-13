@@ -1,4 +1,4 @@
-namespace aspnetCoreReactTemplate
+namespace HPHR.API
 {
     public class SpaFallbackOptions
     {

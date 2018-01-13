@@ -1,7 +1,6 @@
 body {
   padding-top: 5rem;
   font-family: "century gothic", verdana;
-
 }
 
 .btn-link {
@@ -14,4 +13,33 @@ body {
 
 .table td{
   vertical-align: middle;
+}
+
+.logo-color {
+  color: crimson !important;
+  font-weight: bold;
+}
+
+.color-light-blue {
+  color: #30A9DE !important;
+}
+
+.color-light-red {
+  color: #E53A40 !important;
+}
+
+.color-light-yellow {
+  color: #EFDC05 !important;
+}
+
+.card-padding{
+  padding: 1.2rem !important;
+}
+
+.font-14 {
+  font-size: 14px !important;
+}
+
+.padding-5 {
+  padding: 5px;
 }
