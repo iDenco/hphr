@@ -1,11 +1,16 @@
 {
   "ExpandedNodes": [
     "",
-    "\\client-react",
+    "\\api",
+    "\\api\\Controllers",
+    "\\api\\log",
+    "\\applicationcore",
+    "\\applicationcore\\DTOs",
+    "\\applicationcore\\Utils",
     "\\client-react\\components",
     "\\client-react\\components\\Employee",
     "\\client-react\\services"
   ],
-  "SelectedNode": "\\client-react\\components\\Employee\\EmployeeView.tsx",
+  "SelectedNode": "\\applicationcore\\Utils\\Helpers.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -80,12 +80,12 @@ export class Employees extends React.Component<RouteComponentProps<any>, any> {
                     <tbody>
                         {this.state.employees.map((employee, index) =>
                             <tr key={employee.id}>
-                                <td><Link to={RoutePaths.EmployeeView.replace(":id", employee.id.toString())}>{employee.lastName || ''} {employee.firstName|| ''}</Link><br /><span className={`badge ${employee.statusColorClassName}`}>{employee.employeeStatus}</span></td>
+                                <td><Link to={RoutePaths.EmployeeView.replace(":id", employee.id.toString())}>{employee.lastName || ''} {employee.firstName|| ''}</Link><br /><small className={`padding-5 badge ${employee.statusColorClassName}`}>{employee.employeeStatus}</small></td>
                                 <td>{employee.email || '-'}</td>
                                 <td>{employee.officialEmail || '-'}</td>
                                 <td>{employee.phone || '-'}</td>
                                 <td>{employee.mobilePhone|| '-'}</td>
-                                <td>{employee.designation}<br /><span className={`badge ${employee.employeeTypeColorClassName}`}>{employee.employeeType}</span></td>                                
+                                <td>{employee.designation}<br /><small className={`padding-5 badge ${employee.employeeTypeColorClassName}`}>{employee.employeeType}</small></td>                                
                                 <td><Link to={RoutePaths.EmployeeEdit.replace(":id", employee.id.toString())}>edit</Link>
                                     <button type="button" className="btn btn-link" onClick={(e) => this.delete(employee)}>delete</button></td>
                             </tr>

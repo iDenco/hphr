@@ -25,7 +25,7 @@ namespace HPHR.API
                 if (env.IsDevelopment())
                 {
                     // Seed the database in development mode
-                    //dbInitializer.Seed().GetAwaiter().GetResult();
+                    // dbInitializer.Seed().GetAwaiter().GetResult();
                 }
             }
 

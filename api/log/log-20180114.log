@@ -1,0 +1,1598 @@
+2018-01-14 09:20:13.039 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 09:20:13.593 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:20:14.481 +07:00 [Information] Executed DbCommand ("341"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE DATABASE \"hphrdb\";"
+2018-01-14 09:20:14.646 +07:00 [Information] Executed DbCommand ("10"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"__EFMigrationsHistory\" (
+    \"MigrationId\" varchar(150) NOT NULL,
+    \"ProductVersion\" varchar(32) NOT NULL,
+    CONSTRAINT \"PK___EFMigrationsHistory\" PRIMARY KEY (\"MigrationId\")
+);"
+2018-01-14 09:20:14.729 +07:00 [Information] Executed DbCommand ("48"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:20:14.736 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 09:20:14.752 +07:00 [Information] Applying migration '"20171227092939_Initial"'.
+2018-01-14 09:20:14.856 +07:00 [Information] Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"contacts\" (
+    \"id\" serial NOT NULL,
+    \"email\" varchar(30) NULL,
+    \"first_name\" text NOT NULL,
+    \"last_name\" text NOT NULL,
+    \"phone\" text NULL,
+    CONSTRAINT \"pk_contacts\" PRIMARY KEY (\"id\")
+);"
+2018-01-14 09:20:14.869 +07:00 [Information] Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"roles\" (
+    \"id\" text NOT NULL,
+    \"concurrency_stamp\" text NULL,
+    \"name\" varchar(256) NULL,
+    \"normalized_name\" varchar(256) NULL,
+    CONSTRAINT \"pk_roles\" PRIMARY KEY (\"id\")
+);"
+2018-01-14 09:20:14.881 +07:00 [Information] Executed DbCommand ("12"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"users\" (
+    \"id\" text NOT NULL,
+    \"access_failed_count\" int4 NOT NULL,
+    \"concurrency_stamp\" text NULL,
+    \"email\" varchar(256) NULL,
+    \"email_confirmed\" bool NOT NULL,
+    \"given_name\" text NULL,
+    \"lockout_enabled\" bool NOT NULL,
+    \"lockout_end\" timestamptz NULL,
+    \"normalized_email\" varchar(256) NULL,
+    \"normalized_user_name\" varchar(256) NULL,
+    \"password_hash\" text NULL,
+    \"phone_number\" text NULL,
+    \"phone_number_confirmed\" bool NOT NULL,
+    \"security_stamp\" text NULL,
+    \"two_factor_enabled\" bool NOT NULL,
+    \"user_name\" varchar(256) NULL,
+    CONSTRAINT \"pk_users\" PRIMARY KEY (\"id\")
+);"
+2018-01-14 09:20:14.896 +07:00 [Information] Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"role_claims\" (
+    \"id\" serial NOT NULL,
+    \"claim_type\" text NULL,
+    \"claim_value\" text NULL,
+    \"role_id\" text NOT NULL,
+    CONSTRAINT \"pk_role_claims\" PRIMARY KEY (\"id\"),
+    CONSTRAINT \"fk_role_claims_roles_role_id\" FOREIGN KEY (\"role_id\") REFERENCES \"roles\" (\"id\") ON DELETE CASCADE
+);"
+2018-01-14 09:20:14.913 +07:00 [Information] Executed DbCommand ("16"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"user_claims\" (
+    \"id\" serial NOT NULL,
+    \"claim_type\" text NULL,
+    \"claim_value\" text NULL,
+    \"user_id\" text NOT NULL,
+    CONSTRAINT \"pk_user_claims\" PRIMARY KEY (\"id\"),
+    CONSTRAINT \"fk_user_claims_users_user_id\" FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\") ON DELETE CASCADE
+);"
+2018-01-14 09:20:14.926 +07:00 [Information] Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"user_logins\" (
+    \"login_provider\" text NOT NULL,
+    \"provider_key\" text NOT NULL,
+    \"provider_display_name\" text NULL,
+    \"user_id\" text NOT NULL,
+    CONSTRAINT \"pk_user_logins\" PRIMARY KEY (\"login_provider\", \"provider_key\"),
+    CONSTRAINT \"fk_user_logins_users_user_id\" FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\") ON DELETE CASCADE
+);"
+2018-01-14 09:20:14.937 +07:00 [Information] Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"user_roles\" (
+    \"user_id\" text NOT NULL,
+    \"role_id\" text NOT NULL,
+    CONSTRAINT \"pk_user_roles\" PRIMARY KEY (\"user_id\", \"role_id\"),
+    CONSTRAINT \"fk_user_roles_roles_role_id\" FOREIGN KEY (\"role_id\") REFERENCES \"roles\" (\"id\") ON DELETE CASCADE,
+    CONSTRAINT \"fk_user_roles_users_user_id\" FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\") ON DELETE CASCADE
+);"
+2018-01-14 09:20:14.953 +07:00 [Information] Executed DbCommand ("15"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"user_tokens\" (
+    \"user_id\" text NOT NULL,
+    \"login_provider\" text NOT NULL,
+    \"name\" text NOT NULL,
+    \"value\" text NULL,
+    CONSTRAINT \"pk_user_tokens\" PRIMARY KEY (\"user_id\", \"login_provider\", \"name\"),
+    CONSTRAINT \"fk_user_tokens_users_user_id\" FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\") ON DELETE CASCADE
+);"
+2018-01-14 09:20:14.958 +07:00 [Information] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_role_claims_role_id\" ON \"role_claims\" (\"role_id\");"
+2018-01-14 09:20:14.964 +07:00 [Information] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX \"role_name_index\" ON \"roles\" (\"normalized_name\");"
+2018-01-14 09:20:14.969 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_user_claims_user_id\" ON \"user_claims\" (\"user_id\");"
+2018-01-14 09:20:14.977 +07:00 [Information] Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_user_logins_user_id\" ON \"user_logins\" (\"user_id\");"
+2018-01-14 09:20:14.982 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_user_roles_role_id\" ON \"user_roles\" (\"role_id\");"
+2018-01-14 09:20:14.987 +07:00 [Information] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"email_index\" ON \"users\" (\"normalized_email\");"
+2018-01-14 09:20:14.994 +07:00 [Information] Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX \"user_name_index\" ON \"users\" (\"normalized_user_name\");"
+2018-01-14 09:20:14.997 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171227092939_Initial', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.016 +07:00 [Information] Applying migration '"20171227103615_AddEmployeeTable"'.
+2018-01-14 09:20:15.086 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ALTER COLUMN \"email\" TYPE varchar(50);
+ALTER TABLE \"contacts\" ALTER COLUMN \"email\" DROP NOT NULL;
+ALTER TABLE \"contacts\" ALTER COLUMN \"email\" DROP DEFAULT;"
+2018-01-14 09:20:15.087 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"mobile_phone\" text NULL;"
+2018-01-14 09:20:15.089 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"official_email\" varchar(50) NULL;"
+2018-01-14 09:20:15.098 +07:00 [Information] Executed DbCommand ("9"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"designations\" (
+    \"id\" serial NOT NULL,
+    \"description\" text NULL,
+    \"name\" varchar(100) NOT NULL,
+    CONSTRAINT \"pk_designations\" PRIMARY KEY (\"id\")
+);"
+2018-01-14 09:20:15.107 +07:00 [Information] Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"employee_types\" (
+    \"id\" serial NOT NULL,
+    \"description\" text NULL,
+    \"name\" varchar(50) NOT NULL,
+    CONSTRAINT \"pk_employee_types\" PRIMARY KEY (\"id\")
+);"
+2018-01-14 09:20:15.121 +07:00 [Information] Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"employees\" (
+    \"id\" serial NOT NULL,
+    \"abaaccount_name\" varchar(150) NULL,
+    \"abaaccount_number\" varchar(20) NULL,
+    \"contact_id\" int4 NOT NULL,
+    \"created_date\" timestamp NOT NULL,
+    \"designation_id\" int4 NOT NULL,
+    \"employee_status\" int4 NOT NULL,
+    \"employee_type_id\" int4 NOT NULL,
+    \"ended_probation_at\" timestamp NOT NULL,
+    \"hired_at\" timestamp NOT NULL,
+    \"is_deleted\" bool NOT NULL,
+    \"is_under_probation\" bool NULL,
+    \"leave_at\" timestamp NOT NULL,
+    \"remarks\" text NULL,
+    \"updated_date\" timestamp NOT NULL,
+    CONSTRAINT \"pk_employees\" PRIMARY KEY (\"id\"),
+    CONSTRAINT \"fk_employees_contacts_contact_id\" FOREIGN KEY (\"contact_id\") REFERENCES \"contacts\" (\"id\") ON DELETE CASCADE,
+    CONSTRAINT \"fk_employees_designations_designation_id\" FOREIGN KEY (\"designation_id\") REFERENCES \"designations\" (\"id\") ON DELETE CASCADE,
+    CONSTRAINT \"fk_employees_employee_types_employee_type_id\" FOREIGN KEY (\"employee_type_id\") REFERENCES \"employee_types\" (\"id\") ON DELETE CASCADE
+);"
+2018-01-14 09:20:15.128 +07:00 [Information] Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_employees_contact_id\" ON \"employees\" (\"contact_id\");"
+2018-01-14 09:20:15.138 +07:00 [Information] Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_employees_designation_id\" ON \"employees\" (\"designation_id\");"
+2018-01-14 09:20:15.143 +07:00 [Information] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_employees_employee_type_id\" ON \"employees\" (\"employee_type_id\");"
+2018-01-14 09:20:15.152 +07:00 [Information] Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171227103615_AddEmployeeTable', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.171 +07:00 [Information] Applying migration '"20171228040343_UpdateDefaultValueForIsUnderProbation"'.
+2018-01-14 09:20:15.210 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ALTER COLUMN \"is_under_probation\" TYPE bool;
+ALTER TABLE \"employees\" ALTER COLUMN \"is_under_probation\" SET NOT NULL;
+ALTER TABLE \"employees\" ALTER COLUMN \"is_under_probation\" DROP DEFAULT;"
+2018-01-14 09:20:15.212 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171228040343_UpdateDefaultValueForIsUnderProbation', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.216 +07:00 [Information] Applying migration '"20171228101751_UpdateBaseModelAndEmpTables"'.
+2018-01-14 09:20:15.264 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ALTER COLUMN \"updated_date\" TYPE timestamp;
+ALTER TABLE \"employees\" ALTER COLUMN \"updated_date\" DROP NOT NULL;
+ALTER TABLE \"employees\" ALTER COLUMN \"updated_date\" DROP DEFAULT;"
+2018-01-14 09:20:15.265 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ALTER COLUMN \"leave_at\" TYPE timestamp;
+ALTER TABLE \"employees\" ALTER COLUMN \"leave_at\" DROP NOT NULL;
+ALTER TABLE \"employees\" ALTER COLUMN \"leave_at\" DROP DEFAULT;"
+2018-01-14 09:20:15.267 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ALTER COLUMN \"ended_probation_at\" TYPE timestamp;
+ALTER TABLE \"employees\" ALTER COLUMN \"ended_probation_at\" DROP NOT NULL;
+ALTER TABLE \"employees\" ALTER COLUMN \"ended_probation_at\" DROP DEFAULT;"
+2018-01-14 09:20:15.269 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171228101751_UpdateBaseModelAndEmpTables', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.271 +07:00 [Information] Applying migration '"20171229070810_AddEmployeeStatusTable"'.
+2018-01-14 09:20:15.341 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" RENAME COLUMN \"employee_status\" TO \"status_id\";"
+2018-01-14 09:20:15.342 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ADD \"employee_status_id\" int4 NULL;"
+2018-01-14 09:20:15.349 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE \"employee_statuses\" (
+    \"id\" serial NOT NULL,
+    \"code\" varchar(7) NOT NULL,
+    \"description\" varchar(15) NULL,
+    \"is_enabled\" bool NOT NULL,
+    CONSTRAINT \"pk_employee_statuses\" PRIMARY KEY (\"id\")
+);"
+2018-01-14 09:20:15.355 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX \"ix_employees_employee_status_id\" ON \"employees\" (\"employee_status_id\");"
+2018-01-14 09:20:15.359 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ADD CONSTRAINT \"fk_employees_employee_statuses_employee_status_id\" FOREIGN KEY (\"employee_status_id\") REFERENCES \"employee_statuses\" (\"id\") ON DELETE NO ACTION;"
+2018-01-14 09:20:15.360 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171229070810_AddEmployeeStatusTable', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.365 +07:00 [Information] Applying migration '"20171229071512_AlterEmployeeStatus"'.
+2018-01-14 09:20:15.412 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employee_statuses\" ALTER COLUMN \"code\" TYPE varchar(15);
+ALTER TABLE \"employee_statuses\" ALTER COLUMN \"code\" SET NOT NULL;
+ALTER TABLE \"employee_statuses\" ALTER COLUMN \"code\" DROP DEFAULT;"
+2018-01-14 09:20:15.414 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171229071512_AlterEmployeeStatus', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.418 +07:00 [Information] Applying migration '"20171230054439_AddPhysicalAddressToContactTable"'.
+2018-01-14 09:20:15.475 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"physical_city\" varchar(70) NULL;"
+2018-01-14 09:20:15.476 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"physical_country\" varchar(70) NULL;"
+2018-01-14 09:20:15.478 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"physical_state\" varchar(70) NULL;"
+2018-01-14 09:20:15.480 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"physical_street\" varchar(200) NULL;"
+2018-01-14 09:20:15.481 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"contacts\" ADD \"physical_zip_code\" varchar(9) NULL;"
+2018-01-14 09:20:15.483 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20171230054439_AddPhysicalAddressToContactTable', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.485 +07:00 [Information] Applying migration '"20180106080242_UpdateEmployeeStatus"'.
+2018-01-14 09:20:15.533 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" DROP CONSTRAINT \"fk_employees_employee_statuses_employee_status_id\";"
+2018-01-14 09:20:15.534 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" DROP COLUMN \"status_id\";"
+2018-01-14 09:20:15.536 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ALTER COLUMN \"employee_status_id\" TYPE int4;
+ALTER TABLE \"employees\" ALTER COLUMN \"employee_status_id\" SET NOT NULL;
+ALTER TABLE \"employees\" ALTER COLUMN \"employee_status_id\" DROP DEFAULT;"
+2018-01-14 09:20:15.540 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""ALTER TABLE \"employees\" ADD CONSTRAINT \"fk_employees_employee_statuses_employee_status_id\" FOREIGN KEY (\"employee_status_id\") REFERENCES \"employee_statuses\" (\"id\") ON DELETE CASCADE;"
+2018-01-14 09:20:15.541 +07:00 [Information] Executed DbCommand ("0"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"__EFMigrationsHistory\" (\"MigrationId\", \"ProductVersion\")
+VALUES ('20180106080242_UpdateEmployeeStatus', '2.0.1-rtm-125');"
+2018-01-14 09:20:15.903 +07:00 [Information] Executed DbCommand ("46"ms) [Parameters=["@__normalizedEmail_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_email\" = @__normalizedEmail_0
+LIMIT 1"
+2018-01-14 09:20:16.035 +07:00 [Information] Executed DbCommand ("18"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 09:20:16.171 +07:00 [Information] Executed DbCommand ("17"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"users\" (\"id\", \"access_failed_count\", \"concurrency_stamp\", \"email\", \"email_confirmed\", \"given_name\", \"lockout_enabled\", \"lockout_end\", \"normalized_email\", \"normalized_user_name\", \"password_hash\", \"phone_number\", \"phone_number_confirmed\", \"security_stamp\", \"two_factor_enabled\", \"user_name\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);"
+2018-01-14 09:20:16.231 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"contacts\" AS \"c\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:20:16.308 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10)
+RETURNING \"id\";
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21)
+RETURNING \"id\";"
+2018-01-14 09:20:16.363 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employees\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:20:16.369 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_statuses\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:20:16.375 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_types\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:20:16.382 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"designations\" AS \"d\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:20:16.443 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p0, @p1)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p2, @p3)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p4, @p5)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p6, @p7, @p8)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p9, @p10, @p11)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p12, @p13, @p14)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p15, @p16, @p17)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p18, @p19, @p20)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p21, @p22, @p23)
+RETURNING \"id\";
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p24, @p25)
+RETURNING \"id\";
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p26, @p27)
+RETURNING \"id\";"
+2018-01-14 09:20:16.467 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:20:16.491 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:20:16.511 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:20:16.536 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:20:16.609 +07:00 [Information] Executed DbCommand ("12"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13)
+RETURNING \"id\";
+INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27)
+RETURNING \"id\";"
+2018-01-14 09:20:24.392 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 11766ms
+2018-01-14 09:25:27.489 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 09:25:28.321 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:25:29.506 +07:00 [Information] Executed DbCommand ("63"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:25:29.591 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:25:29.611 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 09:25:29.628 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 09:25:30.012 +07:00 [Information] Executed DbCommand ("102"ms) [Parameters=["@__normalizedEmail_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_email\" = @__normalizedEmail_0
+LIMIT 1"
+2018-01-14 09:25:30.289 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"contacts\" AS \"c\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:25:30.331 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:25:30.851 +07:00 [Information] Executed DbCommand ("102"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"contacts\"
+WHERE \"id\" = @p0;
+DELETE FROM \"contacts\"
+WHERE \"id\" = @p1;
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)
+RETURNING \"id\";
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23)
+RETURNING \"id\";"
+2018-01-14 09:25:31.048 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employees\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:25:31.061 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_statuses\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:25:31.115 +07:00 [Information] Executed DbCommand ("12"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:25:31.176 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_types\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:25:31.214 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:25:31.297 +07:00 [Information] Executed DbCommand ("12"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"designations\" AS \"d\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:25:31.343 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:25:31.501 +07:00 [Information] Executed DbCommand ("31"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?', @p28='?', @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?', @p36='?', @p37='?', @p38='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"designations\"
+WHERE \"id\" = @p0;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p1;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p2;
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p3, @p4)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p5, @p6)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p7, @p8)
+RETURNING \"id\";
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p9;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p10;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p11;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p12;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p13;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p14;
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p15, @p16, @p17)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p18, @p19, @p20)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p21, @p22, @p23)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p24, @p25, @p26)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p27, @p28, @p29)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p30, @p31, @p32)
+RETURNING \"id\";
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p33;
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p34;
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p35, @p36)
+RETURNING \"id\";
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p37, @p38)
+RETURNING \"id\";"
+2018-01-14 09:25:31.517 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:25:31.520 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:25:31.522 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:25:31.530 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:25:31.704 +07:00 [Information] Executed DbCommand ("59"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13)
+RETURNING \"id\";
+INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27)
+RETURNING \"id\";"
+2018-01-14 09:26:29.968 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 09:26:30.687 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:26:31.879 +07:00 [Information] Executed DbCommand ("183"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:26:31.941 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:26:31.971 +07:00 [Information] Executed DbCommand ("14"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 09:26:31.993 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 09:26:34.858 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/  
+2018-01-14 09:26:46.615 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 17634ms
+2018-01-14 09:26:46.920 +07:00 [Information] Request finished in 12068.749ms 200 text/html; charset=UTF-8
+2018-01-14 09:26:46.992 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 09:26:47.010 +07:00 [Information] Handling request: /main.js
+2018-01-14 09:26:47.140 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 09:26:47.578 +07:00 [Information] Finished handling request.
+2018-01-14 09:26:47.578 +07:00 [Information] Request finished in 586.151ms 200 application/javascript
+2018-01-14 09:26:47.868 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 09:26:48.530 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/favicon.ico  
+2018-01-14 09:26:48.530 +07:00 [Information] Handling request: /favicon.ico
+2018-01-14 09:26:48.567 +07:00 [Information] Sending file. Request path: '"/favicon.ico"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/favicon.ico"'
+2018-01-14 09:26:48.603 +07:00 [Information] Finished handling request.
+2018-01-14 09:26:48.604 +07:00 [Information] Request finished in 73.09ms 200 image/x-icon
+2018-01-14 09:26:50.085 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login application/x-www-form-urlencoded 61
+2018-01-14 09:26:50.085 +07:00 [Information] Handling request: /api/auth/login
+2018-01-14 09:26:50.143 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: null"
+2018-01-14 09:26:50.490 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Login (api)" with arguments (["user@test.com", "P2ssw0rd!"]) - ModelState is Valid
+2018-01-14 09:26:50.502 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:26:50.841 +07:00 [Information] Executed DbCommand ("55"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 09:26:50.927 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 09:26:50.958 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Login (api)" in 565.932ms
+2018-01-14 09:26:50.958 +07:00 [Information] Finished handling request.
+2018-01-14 09:26:50.969 +07:00 [Information] Request finished in 884.534ms 400 application/json; charset=utf-8
+2018-01-14 09:27:17.513 +07:00 [Error] Connection id ""0HLAQUOTLKHF8"", Request id ""0HLAQUOTLKHF8:00000003"": An unhandled exception was thrown by the application.
+System.IO.IOException: The read operation failed, see inner exception. ---> System.Net.Http.CurlException: Transferred a partial file
+   at System.Net.Http.CurlHandler.ThrowIfCURLEError(CURLcode error)
+   at System.Net.Http.CurlHandler.MultiAgent.FinishRequest(StrongToWeakReference`1 easyWrapper, CURLcode messageResult)
+   --- End of inner exception stack trace ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.IO.Stream.<CopyToAsyncInternal>d__27.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.SpaServices.Webpack.ConditionalProxyMiddleware.<PerformProxyRequest>d__7.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.SpaServices.Webpack.ConditionalProxyMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-01-14 09:27:17.521 +07:00 [Information] Request finished in 29653.385ms 200 text/event-stream; charset=utf-8
+2018-01-14 09:27:50.348 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 09:33:26.929 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 09:33:27.411 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:33:28.320 +07:00 [Information] Executed DbCommand ("71"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:33:28.366 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:33:28.382 +07:00 [Information] Executed DbCommand ("10"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 09:33:28.402 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 09:33:28.770 +07:00 [Information] Executed DbCommand ("82"ms) [Parameters=["@__normalizedEmail_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_email\" = @__normalizedEmail_0
+LIMIT 1"
+2018-01-14 09:33:29.034 +07:00 [Information] Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"contacts\" AS \"c\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:33:29.122 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:33:29.405 +07:00 [Information] Executed DbCommand ("34"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"contacts\"
+WHERE \"id\" = @p0;
+DELETE FROM \"contacts\"
+WHERE \"id\" = @p1;
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)
+RETURNING \"id\";
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23)
+RETURNING \"id\";"
+2018-01-14 09:33:29.475 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employees\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:33:29.489 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_statuses\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:33:29.508 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:33:29.544 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_types\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:33:29.572 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:33:29.609 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"designations\" AS \"d\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:33:29.626 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:33:29.736 +07:00 [Information] Executed DbCommand ("28"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?', @p28='?', @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?', @p36='?', @p37='?', @p38='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"designations\"
+WHERE \"id\" = @p0;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p1;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p2;
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p3, @p4)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p5, @p6)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p7, @p8)
+RETURNING \"id\";
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p9;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p10;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p11;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p12;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p13;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p14;
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p15, @p16, @p17)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p18, @p19, @p20)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p21, @p22, @p23)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p24, @p25, @p26)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p27, @p28, @p29)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p30, @p31, @p32)
+RETURNING \"id\";
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p33;
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p34;
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p35, @p36)
+RETURNING \"id\";
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p37, @p38)
+RETURNING \"id\";"
+2018-01-14 09:33:29.750 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:33:29.756 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:33:29.759 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:33:29.761 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:33:29.902 +07:00 [Information] Executed DbCommand ("35"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13)
+RETURNING \"id\";
+INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27)
+RETURNING \"id\";"
+2018-01-14 09:33:38.249 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 09:33:42.466 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 16319ms
+2018-01-14 09:42:43.329 +07:00 [Information] Received SIGINT. Waiting for .NET process to exit...
+2018-01-14 09:42:48.354 +07:00 [Information] Request finished in 550112.749ms 200 text/event-stream; charset=utf-8
+2018-01-14 09:43:22.845 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 09:43:23.202 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:43:24.452 +07:00 [Information] Executed DbCommand ("91"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:43:24.493 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 09:43:24.508 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 09:43:24.527 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 09:43:24.963 +07:00 [Information] Executed DbCommand ("80"ms) [Parameters=["@__normalizedEmail_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_email\" = @__normalizedEmail_0
+LIMIT 1"
+2018-01-14 09:43:25.196 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"contacts\" AS \"c\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:43:25.239 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:43:25.643 +07:00 [Information] Executed DbCommand ("37"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"contacts\"
+WHERE \"id\" = @p0;
+DELETE FROM \"contacts\"
+WHERE \"id\" = @p1;
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)
+RETURNING \"id\";
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23)
+RETURNING \"id\";"
+2018-01-14 09:43:25.734 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employees\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:43:25.751 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_statuses\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:43:25.774 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:43:25.806 +07:00 [Information] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_types\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:43:25.821 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:43:25.848 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"designations\" AS \"d\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 09:43:25.877 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:43:25.999 +07:00 [Information] Executed DbCommand ("56"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?', @p28='?', @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?', @p36='?', @p37='?', @p38='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"designations\"
+WHERE \"id\" = @p0;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p1;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p2;
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p3, @p4)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p5, @p6)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p7, @p8)
+RETURNING \"id\";
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p9;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p10;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p11;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p12;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p13;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p14;
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p15, @p16, @p17)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p18, @p19, @p20)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p21, @p22, @p23)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p24, @p25, @p26)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p27, @p28, @p29)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p30, @p31, @p32)
+RETURNING \"id\";
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p33;
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p34;
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p35, @p36)
+RETURNING \"id\";
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p37, @p38)
+RETURNING \"id\";"
+2018-01-14 09:43:26.020 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 09:43:26.025 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 09:43:26.027 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 09:43:26.029 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 09:43:26.130 +07:00 [Information] Executed DbCommand ("31"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13)
+RETURNING \"id\";
+INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27)
+RETURNING \"id\";"
+2018-01-14 09:43:30.048 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 09:43:36.777 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/  
+2018-01-14 09:43:38.965 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 16936ms
+2018-01-14 09:43:39.434 +07:00 [Information] Request finished in 2657.032ms 200 text/html; charset=UTF-8
+2018-01-14 09:43:39.454 +07:00 [Information] Request finished in 9413.269ms 200 text/event-stream; charset=utf-8
+2018-01-14 09:43:39.491 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 09:43:39.505 +07:00 [Information] Handling request: /main.js
+2018-01-14 09:43:39.529 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 09:43:39.921 +07:00 [Information] Finished handling request.
+2018-01-14 09:43:39.922 +07:00 [Information] Request finished in 430.741ms 200 application/javascript
+2018-01-14 09:43:40.169 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 09:43:40.494 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/favicon.ico  
+2018-01-14 09:43:40.494 +07:00 [Information] Handling request: /favicon.ico
+2018-01-14 09:43:40.495 +07:00 [Information] Sending file. Request path: '"/favicon.ico"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/favicon.ico"'
+2018-01-14 09:43:40.496 +07:00 [Information] Finished handling request.
+2018-01-14 09:43:40.496 +07:00 [Information] Request finished in 1.836ms 200 image/x-icon
+2018-01-14 09:43:41.535 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login application/x-www-form-urlencoded 61
+2018-01-14 09:43:41.535 +07:00 [Information] Handling request: /api/auth/login
+2018-01-14 09:43:41.600 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: null"
+2018-01-14 09:43:41.948 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Login (api)" with arguments (["user@test.com", "P2ssw0rd!"]) - ModelState is Valid
+2018-01-14 09:43:41.957 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:43:41.979 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 09:43:42.016 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 09:43:42.049 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Login (api)" in 195.001ms
+2018-01-14 09:43:42.049 +07:00 [Information] Finished handling request.
+2018-01-14 09:43:42.065 +07:00 [Information] Request finished in 529.619ms 400 application/json; charset=utf-8
+2018-01-14 09:47:20.865 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/register application/x-www-form-urlencoded 45
+2018-01-14 09:47:20.866 +07:00 [Information] Handling request: /api/auth/register
+2018-01-14 09:47:20.868 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: null"
+2018-01-14 09:47:20.898 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Register (api)" with arguments (["HPHR.ApplicationCore.DTOs.NewUser"]) - ModelState is Valid
+2018-01-14 09:47:20.925 +07:00 [Warning] User "b94f10bd-a73a-4866-93b8-8ff1564dfc82" password validation failed: "PasswordRequiresNonAlphanumeric;PasswordRequiresDigit;PasswordRequiresUpper".
+2018-01-14 09:47:20.926 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 09:47:20.932 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Register (api)" in 48.951ms
+2018-01-14 09:47:20.932 +07:00 [Information] Finished handling request.
+2018-01-14 09:47:20.933 +07:00 [Information] Request finished in 67.739ms 400 application/json; charset=utf-8
+2018-01-14 09:47:33.543 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/register application/x-www-form-urlencoded 47
+2018-01-14 09:47:33.543 +07:00 [Information] Handling request: /api/auth/register
+2018-01-14 09:47:33.544 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: null"
+2018-01-14 09:47:33.545 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Register (api)" with arguments (["HPHR.ApplicationCore.DTOs.NewUser"]) - ModelState is Valid
+2018-01-14 09:47:33.546 +07:00 [Warning] User "f9a0ba85-a179-4f30-b45f-2768b840a0fa" password validation failed: "PasswordRequiresNonAlphanumeric;PasswordRequiresUpper".
+2018-01-14 09:47:33.546 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 09:47:33.547 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Register (api)" in 2.43ms
+2018-01-14 09:47:33.547 +07:00 [Information] Finished handling request.
+2018-01-14 09:47:33.547 +07:00 [Information] Request finished in 3.645ms 400 application/json; charset=utf-8
+2018-01-14 09:47:40.450 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/  
+2018-01-14 09:47:40.454 +07:00 [Information] Request finished in 4.368ms 200 text/html; charset=UTF-8
+2018-01-14 09:47:40.468 +07:00 [Information] Request finished in 240299.795ms 200 text/event-stream; charset=utf-8
+2018-01-14 09:47:40.501 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 09:47:40.502 +07:00 [Information] Handling request: /main.js
+2018-01-14 09:47:40.502 +07:00 [Information] The file "/main.js" was not modified
+2018-01-14 09:47:40.504 +07:00 [Information] Finished handling request.
+2018-01-14 09:47:40.505 +07:00 [Information] Request finished in 3.869ms 304 application/javascript
+2018-01-14 09:47:41.113 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 09:47:58.128 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/register  
+2018-01-14 09:47:58.129 +07:00 [Information] Handling request: /register
+2018-01-14 09:47:58.129 +07:00 [Information] Rewriting path: /register > /
+2018-01-14 09:47:58.131 +07:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/index.html"'
+2018-01-14 09:47:58.131 +07:00 [Information] Finished handling request.
+2018-01-14 09:47:58.131 +07:00 [Information] Request finished in 3.029ms 200 text/html
+2018-01-14 09:47:58.729 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 09:48:05.065 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/register application/x-www-form-urlencoded 41
+2018-01-14 09:48:05.065 +07:00 [Information] Handling request: /api/auth/register
+2018-01-14 09:48:05.065 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: null"
+2018-01-14 09:48:05.066 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Register (api)" with arguments (["HPHR.ApplicationCore.DTOs.NewUser"]) - ModelState is Valid
+2018-01-14 09:48:05.107 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:48:05.111 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 09:48:05.140 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"users\" (\"id\", \"access_failed_count\", \"concurrency_stamp\", \"email\", \"email_confirmed\", \"given_name\", \"lockout_enabled\", \"lockout_end\", \"normalized_email\", \"normalized_user_name\", \"password_hash\", \"phone_number\", \"phone_number_confirmed\", \"security_stamp\", \"two_factor_enabled\", \"user_name\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);"
+2018-01-14 09:48:05.147 +07:00 [Information] New user registered (id: 50ea56fc-75e6-4874-a671-c8ba0e55dc21)
+2018-01-14 09:48:05.204 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Register (api)" in 138.801ms
+2018-01-14 09:48:05.259 +07:00 [Error] An unhandled exception has occurred while executing the request
+System.Net.Mail.SmtpException: Server does not support secure connections.
+   at System.Net.Mail.SmtpConnection.ConnectAndHandshakeAsyncResult.SendEHelloCallback(IAsyncResult result)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Net.Mail.SmtpConnection.ConnectAndHandshakeAsyncResult.End(IAsyncResult result)
+   at System.Net.Mail.SmtpTransport.EndGetConnection(IAsyncResult result)
+   at System.Net.Mail.SmtpClient.ConnectCallback(IAsyncResult result)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at HPHR.Infrastructure.Services.EmailSender.<SendEmailAsync>d__4.MoveNext() in /Users/xhsiow/workspaces/HPHR/infrastructure/Services/EmailSender.cs:line 40
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at HPHR.API.Controllers.AuthController.<Register>d__8.MoveNext() in /Users/xhsiow/workspaces/HPHR/api/Controllers/AuthController.cs:line 117
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeActionMethodAsync>d__12.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeNextActionFilterAsync>d__10.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Rethrow(ActionExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ControllerActionInvoker.<InvokeInnerFilterAsync>d__14.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeNextResourceFilter>d__22.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Rethrow(ResourceExecutedContext context)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeFilterPipelineAsync>d__17.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Mvc.Internal.ResourceInvoker.<InvokeAsync>d__15.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Builder.RouterMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at HPHR.API.SpaFallbackMiddleware.<Invoke>d__4.MoveNext() in /Users/xhsiow/workspaces/HPHR/api/Middleware/SpaFallbackMiddleware.cs:line 55
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.MigrationsEndPointMiddleware.<Invoke>d__4.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.DatabaseErrorPageMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.<Invoke>d__7.MoveNext()
+2018-01-14 09:48:05.312 +07:00 [Information] Request finished in 247.834ms 500 text/html; charset=utf-8
+2018-01-14 09:48:07.909 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login application/x-www-form-urlencoded 61
+2018-01-14 09:48:07.911 +07:00 [Information] Handling request: /api/auth/login
+2018-01-14 09:48:07.911 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: undefined"
+2018-01-14 09:48:07.912 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Login (api)" with arguments (["user@test.com", "P2ssw0rd!"]) - ModelState is Valid
+2018-01-14 09:48:07.913 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 09:48:07.916 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 09:48:07.952 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 09:48:07.952 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Login (api)" in 40.752ms
+2018-01-14 09:48:07.953 +07:00 [Information] Finished handling request.
+2018-01-14 09:48:07.953 +07:00 [Information] Request finished in 44.061ms 400 application/json; charset=utf-8
+2018-01-14 09:52:16.843 +07:00 [Information] Request finished in 258111.771ms 200 text/event-stream; charset=utf-8
+2018-01-14 10:01:40.066 +07:00 [Information] Request finished in 838948.802ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:06:02.433 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 11:06:02.916 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:06:03.755 +07:00 [Information] Executed DbCommand ("55"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:06:03.783 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:06:03.801 +07:00 [Information] Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 11:06:03.819 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 11:06:15.680 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 13786ms
+2018-01-14 11:07:24.938 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 11:07:25.315 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:07:26.039 +07:00 [Information] Executed DbCommand ("59"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:07:26.074 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:07:26.091 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 11:07:26.119 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 11:07:38.802 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 14390ms
+2018-01-14 11:10:49.572 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/  
+2018-01-14 11:10:49.643 +07:00 [Information] Request finished in 76.882ms 200 text/html; charset=UTF-8
+2018-01-14 11:10:49.681 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:10:49.699 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:10:49.724 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:10:49.983 +07:00 [Information] Finished handling request.
+2018-01-14 11:10:49.984 +07:00 [Information] Request finished in 303.234ms 200 application/javascript
+2018-01-14 11:10:50.347 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:10:50.795 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/favicon.ico  
+2018-01-14 11:10:50.795 +07:00 [Information] Handling request: /favicon.ico
+2018-01-14 11:10:50.796 +07:00 [Information] Sending file. Request path: '"/favicon.ico"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/favicon.ico"'
+2018-01-14 11:10:50.796 +07:00 [Information] Finished handling request.
+2018-01-14 11:10:50.797 +07:00 [Information] Request finished in 1.954ms 200 image/x-icon
+2018-01-14 11:10:51.586 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login application/x-www-form-urlencoded 61
+2018-01-14 11:10:51.586 +07:00 [Information] Handling request: /api/auth/login
+2018-01-14 11:10:51.647 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: undefined"
+2018-01-14 11:10:52.090 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Login (api)" with arguments (["user@test.com", "P2ssw0rd!"]) - ModelState is Valid
+2018-01-14 11:10:52.105 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:10:52.519 +07:00 [Information] Executed DbCommand ("61"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 11:10:52.729 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:10:52.759 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Login (api)" in 804.25ms
+2018-01-14 11:10:52.760 +07:00 [Information] Finished handling request.
+2018-01-14 11:10:52.763 +07:00 [Information] Request finished in 1176.939ms 400 application/json; charset=utf-8
+2018-01-14 11:11:20.917 +07:00 [Error] Connection id ""0HLAR0J5NMHD5"", Request id ""0HLAR0J5NMHD5:00000003"": An unhandled exception was thrown by the application.
+System.IO.IOException: The read operation failed, see inner exception. ---> System.Net.Http.CurlException: Transferred a partial file
+   at System.Net.Http.CurlHandler.ThrowIfCURLEError(CURLcode error)
+   at System.Net.Http.CurlHandler.MultiAgent.FinishRequest(StrongToWeakReference`1 easyWrapper, CURLcode messageResult)
+   --- End of inner exception stack trace ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.IO.Stream.<CopyToAsyncInternal>d__27.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.SpaServices.Webpack.ConditionalProxyMiddleware.<PerformProxyRequest>d__7.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.SpaServices.Webpack.ConditionalProxyMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-01-14 11:11:20.919 +07:00 [Information] Request finished in 30572.235ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:19:48.222 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 11:19:48.763 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:19:49.588 +07:00 [Information] Executed DbCommand ("74"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:19:49.611 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:19:49.630 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 11:19:49.648 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 11:19:49.994 +07:00 [Information] Executed DbCommand ("65"ms) [Parameters=["@__normalizedEmail_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_email\" = @__normalizedEmail_0
+LIMIT 1"
+2018-01-14 11:19:50.218 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"contacts\" AS \"c\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 11:19:50.262 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 11:19:50.611 +07:00 [Information] Executed DbCommand ("45"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"contacts\"
+WHERE \"id\" = @p0;
+DELETE FROM \"contacts\"
+WHERE \"id\" = @p1;
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12)
+RETURNING \"id\";
+INSERT INTO \"contacts\" (\"email\", \"first_name\", \"last_name\", \"mobile_phone\", \"official_email\", \"phone\", \"physical_city\", \"physical_country\", \"physical_state\", \"physical_street\", \"physical_zip_code\")
+VALUES (@p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23)
+RETURNING \"id\";"
+2018-01-14 11:19:50.686 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employees\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 11:19:50.701 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_statuses\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 11:19:50.725 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 11:19:50.764 +07:00 [Information] Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"employee_types\" AS \"e\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 11:19:50.782 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 11:19:50.828 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM \"designations\" AS \"d\")
+    THEN TRUE::bool ELSE FALSE::bool
+END"
+2018-01-14 11:19:50.844 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 11:19:50.937 +07:00 [Information] Executed DbCommand ("22"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?', @p28='?', @p29='?', @p30='?', @p31='?', @p32='?', @p33='?', @p34='?', @p35='?', @p36='?', @p37='?', @p38='?'"], CommandType='Text', CommandTimeout='30']"
+""DELETE FROM \"designations\"
+WHERE \"id\" = @p0;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p1;
+DELETE FROM \"designations\"
+WHERE \"id\" = @p2;
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p3, @p4)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p5, @p6)
+RETURNING \"id\";
+INSERT INTO \"designations\" (\"description\", \"name\")
+VALUES (@p7, @p8)
+RETURNING \"id\";
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p9;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p10;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p11;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p12;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p13;
+DELETE FROM \"employee_statuses\"
+WHERE \"id\" = @p14;
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p15, @p16, @p17)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p18, @p19, @p20)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p21, @p22, @p23)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p24, @p25, @p26)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p27, @p28, @p29)
+RETURNING \"id\";
+INSERT INTO \"employee_statuses\" (\"code\", \"description\", \"is_enabled\")
+VALUES (@p30, @p31, @p32)
+RETURNING \"id\";
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p33;
+DELETE FROM \"employee_types\"
+WHERE \"id\" = @p34;
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p35, @p36)
+RETURNING \"id\";
+INSERT INTO \"employee_types\" (\"description\", \"name\")
+VALUES (@p37, @p38)
+RETURNING \"id\";"
+2018-01-14 11:19:50.969 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"c\".\"id\", \"c\".\"email\", \"c\".\"first_name\", \"c\".\"last_name\", \"c\".\"mobile_phone\", \"c\".\"official_email\", \"c\".\"phone\", \"c\".\"physical_city\", \"c\".\"physical_country\", \"c\".\"physical_state\", \"c\".\"physical_street\", \"c\".\"physical_zip_code\"
+FROM \"contacts\" AS \"c\""
+2018-01-14 11:19:50.971 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"code\", \"e\".\"description\", \"e\".\"is_enabled\"
+FROM \"employee_statuses\" AS \"e\""
+2018-01-14 11:19:50.973 +07:00 [Information] Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"e\".\"id\", \"e\".\"description\", \"e\".\"name\"
+FROM \"employee_types\" AS \"e\""
+2018-01-14 11:19:50.979 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"d\".\"id\", \"d\".\"description\", \"d\".\"name\"
+FROM \"designations\" AS \"d\""
+2018-01-14 11:19:51.088 +07:00 [Information] Executed DbCommand ("31"ms) [Parameters=["@p0='?', @p1='?', @p2='?', @p3='?', @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?', @p14='?', @p15='?', @p16='?', @p17='?', @p18='?', @p19='?', @p20='?', @p21='?', @p22='?', @p23='?', @p24='?', @p25='?', @p26='?', @p27='?'"], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13)
+RETURNING \"id\";
+INSERT INTO \"employees\" (\"abaaccount_name\", \"abaaccount_number\", \"contact_id\", \"created_date\", \"designation_id\", \"employee_status_id\", \"employee_type_id\", \"ended_probation_at\", \"hired_at\", \"is_deleted\", \"is_under_probation\", \"leave_at\", \"remarks\", \"updated_date\")
+VALUES (@p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27)
+RETURNING \"id\";"
+2018-01-14 11:20:02.012 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 14296ms
+2018-01-14 11:20:07.056 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:22:28.465 +07:00 [Error] Connection id ""0HLAR0OBSEVHD"", Request id ""0HLAR0OBSEVHD:00000001"": An unhandled exception was thrown by the application.
+System.IO.IOException: The read operation failed, see inner exception. ---> System.Net.Http.CurlException: Transferred a partial file
+   at System.Net.Http.CurlHandler.ThrowIfCURLEError(CURLcode error)
+   at System.Net.Http.CurlHandler.MultiAgent.FinishRequest(StrongToWeakReference`1 easyWrapper, CURLcode messageResult)
+   --- End of inner exception stack trace ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.IO.Stream.<CopyToAsyncInternal>d__27.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.SpaServices.Webpack.ConditionalProxyMiddleware.<PerformProxyRequest>d__7.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter`1.GetResult()
+   at Microsoft.AspNetCore.SpaServices.Webpack.ConditionalProxyMiddleware.<Invoke>d__6.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Hosting.Internal.RequestServicesContainerMiddleware.<Invoke>d__3.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.Frame`1.<ProcessRequestsAsync>d__2.MoveNext()
+2018-01-14 11:22:28.472 +07:00 [Information] Request finished in 141422.421ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:23:00.774 +07:00 [Information] ts-loader: Using typescript@2.3.4 and /Users/xhsiow/workspaces/HPHR/client-react/tsconfig.json
+2018-01-14 11:23:01.628 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:23:02.602 +07:00 [Information] Executed DbCommand ("64"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:23:02.654 +07:00 [Information] Executed DbCommand ("14"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT EXISTS (SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid=c.relnamespace WHERE c.relname='__EFMigrationsHistory');"
+2018-01-14 11:23:02.675 +07:00 [Information] Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"MigrationId\", \"ProductVersion\"
+FROM \"__EFMigrationsHistory\"
+ORDER BY \"MigrationId\";"
+2018-01-14 11:23:02.706 +07:00 [Information] No migrations were applied. The database is already up to date.
+2018-01-14 11:23:08.282 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/  
+2018-01-14 11:23:21.661 +07:00 [Information] webpack built 974b00cb9c1aec4ac311 in 21455ms
+2018-01-14 11:23:21.968 +07:00 [Information] Request finished in 13693.949ms 200 text/html; charset=UTF-8
+2018-01-14 11:23:21.985 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:23:21.997 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:23:22.017 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:23:22.522 +07:00 [Information] Finished handling request.
+2018-01-14 11:23:22.523 +07:00 [Information] Request finished in 537.223ms 200 application/javascript
+2018-01-14 11:23:23.089 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:23:23.616 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/favicon.ico  
+2018-01-14 11:23:23.616 +07:00 [Information] Handling request: /favicon.ico
+2018-01-14 11:23:23.617 +07:00 [Information] Sending file. Request path: '"/favicon.ico"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/favicon.ico"'
+2018-01-14 11:23:23.618 +07:00 [Information] Finished handling request.
+2018-01-14 11:23:23.618 +07:00 [Information] Request finished in 2.092ms 200 image/x-icon
+2018-01-14 11:23:24.738 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login application/x-www-form-urlencoded 61
+2018-01-14 11:23:24.738 +07:00 [Information] Handling request: /api/auth/login
+2018-01-14 11:23:24.801 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: undefined"
+2018-01-14 11:23:25.166 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Login (api)" with arguments (["user@test.com", "P2ssw0rd!"]) - ModelState is Valid
+2018-01-14 11:23:25.178 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:23:25.515 +07:00 [Information] Executed DbCommand ("61"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 11:23:25.689 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:23:25.726 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Login (api)" in 661.595ms
+2018-01-14 11:23:25.726 +07:00 [Information] Finished handling request.
+2018-01-14 11:23:25.731 +07:00 [Information] Request finished in 992.176ms 400 application/json; charset=utf-8
+2018-01-14 11:23:58.362 +07:00 [Information] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login application/x-www-form-urlencoded 62
+2018-01-14 11:23:58.364 +07:00 [Information] Handling request: /api/auth/login
+2018-01-14 11:23:58.367 +07:00 [Information] "Bearer" was not authenticated. Failure message: "No SecurityTokenValidator available for token: undefined"
+2018-01-14 11:23:58.374 +07:00 [Information] Executing action method "HPHR.API.Controllers.AuthController.Login (api)" with arguments (["userz@test.com", "P2ssw0rd!"]) - ModelState is Valid
+2018-01-14 11:23:58.375 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:23:58.444 +07:00 [Information] Executed DbCommand ("53"ms) [Parameters=["@__normalizedUserName_0='?' (Size = 256)"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"u\".\"id\", \"u\".\"access_failed_count\", \"u\".\"concurrency_stamp\", \"u\".\"email\", \"u\".\"email_confirmed\", \"u\".\"given_name\", \"u\".\"lockout_enabled\", \"u\".\"lockout_end\", \"u\".\"normalized_email\", \"u\".\"normalized_user_name\", \"u\".\"password_hash\", \"u\".\"phone_number\", \"u\".\"phone_number_confirmed\", \"u\".\"security_stamp\", \"u\".\"two_factor_enabled\", \"u\".\"user_name\"
+FROM \"users\" AS \"u\"
+WHERE \"u\".\"normalized_user_name\" = @__normalizedUserName_0
+LIMIT 1"
+2018-01-14 11:23:58.528 +07:00 [Information] User logged in (id: 87f20e91-e088-428c-906f-9728a718777e)
+2018-01-14 11:23:58.563 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:23:58.566 +07:00 [Information] Executed action "HPHR.API.Controllers.AuthController.Login (api)" in 196.702ms
+2018-01-14 11:23:58.567 +07:00 [Information] Finished handling request.
+2018-01-14 11:23:58.568 +07:00 [Information] Request finished in 204.998ms 200 application/json; charset=utf-8
+2018-01-14 11:23:58.630 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:23:58.630 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:23:58.665 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:23:58.668 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:23:58.680 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:23:58.805 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:23:59.049 +07:00 [Information] Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:23:59.065 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:23:59.085 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 405.463ms
+2018-01-14 11:23:59.085 +07:00 [Information] Finished handling request.
+2018-01-14 11:23:59.086 +07:00 [Information] Request finished in 455.87ms 200 application/json; charset=utf-8
+2018-01-14 11:24:04.368 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees/9  
+2018-01-14 11:24:04.368 +07:00 [Information] Handling request: /api/employees/9
+2018-01-14 11:24:04.369 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:24:04.369 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:24:04.377 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (["9"]) - ModelState is Valid
+2018-01-14 11:24:04.556 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:24:04.656 +07:00 [Information] Executed DbCommand ("16"ms) [Parameters=["@__id_0='?'"], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\" AS \"Id0\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"emp\".\"ended_probation_at\", \"emp\".\"hired_at\", \"emp\".\"leave_at\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"designation\".\"id\" AS \"DesignationId\", \"status\".\"id\" AS \"EmployeeStatusId\", \"empType\".\"id\" AS \"EmployeeTypeId\", \"emp\".\"abaaccount_name\" AS \"ABAAccountName\", \"emp\".\"abaaccount_number\" AS \"ABAAccountNumber\", \"emp\".\"remarks\", \"contact\".\"physical_street\" AS \"Street\", \"contact\".\"physical_city\" AS \"City\", \"contact\".\"physical_state\" AS \"State\", \"contact\".\"physical_zip_code\" AS \"ZipCode\", \"contact\".\"physical_country\" AS \"Country\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE (\"emp\".\"id\" = @__id_0) AND (\"status\".\"code\" <> 'Deleted')
+LIMIT 1"
+2018-01-14 11:24:04.763 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:24:04.785 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 408.113ms
+2018-01-14 11:24:04.785 +07:00 [Information] Finished handling request.
+2018-01-14 11:24:04.791 +07:00 [Information] Request finished in 417.393ms 200 application/json; charset=utf-8
+2018-01-14 11:24:18.716 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:24:18.716 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:24:18.717 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:24:18.717 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:24:18.717 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:24:18.718 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:24:18.739 +07:00 [Information] Executed DbCommand ("18"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:24:18.740 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:24:18.740 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 22.873ms
+2018-01-14 11:24:18.740 +07:00 [Information] Finished handling request.
+2018-01-14 11:24:18.740 +07:00 [Information] Request finished in 24.444ms 200 application/json; charset=utf-8
+2018-01-14 11:26:02.669 +07:00 [Information] webpack building...
+2018-01-14 11:26:07.737 +07:00 [Information] webpack built 936c4f153f44bd964882 in 5037ms
+2018-01-14 11:26:07.780 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/974b00cb9c1aec4ac311.hot-update.json  
+2018-01-14 11:26:07.780 +07:00 [Information] Handling request: /974b00cb9c1aec4ac311.hot-update.json
+2018-01-14 11:26:07.785 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:07.786 +07:00 [Information] Request finished in 6.412ms 404 
+2018-01-14 11:26:07.801 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/employees  
+2018-01-14 11:26:07.801 +07:00 [Information] Handling request: /employees
+2018-01-14 11:26:07.801 +07:00 [Information] Rewriting path: /employees > /
+2018-01-14 11:26:07.802 +07:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/index.html"'
+2018-01-14 11:26:07.802 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:07.803 +07:00 [Information] Request finished in 1.844ms 200 text/html
+2018-01-14 11:26:07.823 +07:00 [Information] Request finished in 164733.744ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:26:07.854 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:26:07.854 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:26:07.855 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:26:08.253 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:08.253 +07:00 [Information] Request finished in 399.321ms 200 application/javascript
+2018-01-14 11:26:08.751 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:26:08.751 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:26:08.752 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:26:08.752 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:26:08.752 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:26:08.753 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:26:08.758 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:26:08.759 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:26:08.759 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 6.78ms
+2018-01-14 11:26:08.759 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:08.759 +07:00 [Information] Request finished in 7.987ms 200 application/json; charset=utf-8
+2018-01-14 11:26:08.839 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:26:30.684 +07:00 [Information] webpack building...
+2018-01-14 11:26:33.467 +07:00 [Information] webpack built ce79625c0af2bbdf1b7c in 2753ms
+2018-01-14 11:26:33.498 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/936c4f153f44bd964882.hot-update.json  
+2018-01-14 11:26:33.498 +07:00 [Information] Handling request: /936c4f153f44bd964882.hot-update.json
+2018-01-14 11:26:33.499 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:33.499 +07:00 [Information] Request finished in 0.981ms 404 
+2018-01-14 11:26:33.518 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/employees  
+2018-01-14 11:26:33.518 +07:00 [Information] Handling request: /employees
+2018-01-14 11:26:33.518 +07:00 [Information] Rewriting path: /employees > /
+2018-01-14 11:26:33.519 +07:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/index.html"'
+2018-01-14 11:26:33.519 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:33.519 +07:00 [Information] Request finished in 0.982ms 200 text/html
+2018-01-14 11:26:33.544 +07:00 [Information] Request finished in 24705.624ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:26:33.565 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:26:33.566 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:26:33.566 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:26:34.116 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:34.117 +07:00 [Information] Request finished in 551.492ms 200 application/javascript
+2018-01-14 11:26:34.308 +07:00 [Information] webpack building...
+2018-01-14 11:26:34.621 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:26:34.621 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:26:34.621 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:26:34.621 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:26:34.622 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:26:34.622 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:26:34.628 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:26:34.628 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:26:34.628 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 7.028ms
+2018-01-14 11:26:34.629 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:34.629 +07:00 [Information] Request finished in 8.159ms 200 application/json; charset=utf-8
+2018-01-14 11:26:34.712 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:26:37.166 +07:00 [Information] webpack built 7267943b0b39b7d53ebd in 2831ms
+2018-01-14 11:26:37.231 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/ce79625c0af2bbdf1b7c.hot-update.json  
+2018-01-14 11:26:37.231 +07:00 [Information] Handling request: /ce79625c0af2bbdf1b7c.hot-update.json
+2018-01-14 11:26:37.232 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:37.232 +07:00 [Information] Request finished in 0.742ms 404 
+2018-01-14 11:26:37.250 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/employees  
+2018-01-14 11:26:37.250 +07:00 [Information] Handling request: /employees
+2018-01-14 11:26:37.250 +07:00 [Information] Rewriting path: /employees > /
+2018-01-14 11:26:37.250 +07:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/index.html"'
+2018-01-14 11:26:37.251 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:37.251 +07:00 [Information] Request finished in 0.924ms 200 text/html
+2018-01-14 11:26:37.271 +07:00 [Information] Request finished in 2557.95ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:26:37.293 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:26:37.293 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:26:37.293 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:26:37.503 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:37.503 +07:00 [Information] Request finished in 210.661ms 200 application/javascript
+2018-01-14 11:26:37.781 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:26:37.781 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:26:37.781 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:26:37.781 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:26:37.782 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:26:37.783 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:26:37.789 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:26:37.789 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:26:37.789 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 7.589ms
+2018-01-14 11:26:37.789 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:37.789 +07:00 [Information] Request finished in 8.845ms 200 application/json; charset=utf-8
+2018-01-14 11:26:37.839 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:26:48.201 +07:00 [Information] webpack building...
+2018-01-14 11:26:50.046 +07:00 [Information] webpack built f051d0e1030da3774049 in 1808ms
+2018-01-14 11:26:50.092 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/7267943b0b39b7d53ebd.hot-update.json  
+2018-01-14 11:26:50.092 +07:00 [Information] Handling request: /7267943b0b39b7d53ebd.hot-update.json
+2018-01-14 11:26:50.092 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:50.092 +07:00 [Information] Request finished in 0.731ms 404 
+2018-01-14 11:26:50.106 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/employees  
+2018-01-14 11:26:50.106 +07:00 [Information] Handling request: /employees
+2018-01-14 11:26:50.106 +07:00 [Information] Rewriting path: /employees > /
+2018-01-14 11:26:50.107 +07:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/index.html"'
+2018-01-14 11:26:50.107 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:50.107 +07:00 [Information] Request finished in 1.057ms 200 text/html
+2018-01-14 11:26:50.130 +07:00 [Information] Request finished in 12291.525ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:26:50.160 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:26:50.160 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:26:50.160 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:26:50.408 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:50.408 +07:00 [Information] Request finished in 248.786ms 200 application/javascript
+2018-01-14 11:26:50.691 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:26:50.691 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:26:50.692 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:26:50.692 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:26:50.692 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:26:50.693 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:26:50.698 +07:00 [Information] Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:26:50.699 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:26:50.699 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 6.903ms
+2018-01-14 11:26:50.699 +07:00 [Information] Finished handling request.
+2018-01-14 11:26:50.699 +07:00 [Information] Request finished in 8.177ms 200 application/json; charset=utf-8
+2018-01-14 11:26:50.746 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:27:08.346 +07:00 [Information] webpack building...
+2018-01-14 11:27:10.311 +07:00 [Information] webpack built 0642e13ef760472b3c5f in 1936ms
+2018-01-14 11:27:10.333 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/f051d0e1030da3774049.hot-update.json  
+2018-01-14 11:27:10.333 +07:00 [Information] Handling request: /f051d0e1030da3774049.hot-update.json
+2018-01-14 11:27:10.333 +07:00 [Information] Finished handling request.
+2018-01-14 11:27:10.333 +07:00 [Information] Request finished in 0.611ms 404 
+2018-01-14 11:27:10.346 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/employees  
+2018-01-14 11:27:10.347 +07:00 [Information] Handling request: /employees
+2018-01-14 11:27:10.347 +07:00 [Information] Rewriting path: /employees > /
+2018-01-14 11:27:10.347 +07:00 [Information] Sending file. Request path: '"/index.html"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/index.html"'
+2018-01-14 11:27:10.347 +07:00 [Information] Finished handling request.
+2018-01-14 11:27:10.347 +07:00 [Information] Request finished in 1.291ms 200 text/html
+2018-01-14 11:27:10.371 +07:00 [Information] Request finished in 19624.732ms 200 text/event-stream; charset=utf-8
+2018-01-14 11:27:10.388 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/main.js  
+2018-01-14 11:27:10.388 +07:00 [Information] Handling request: /main.js
+2018-01-14 11:27:10.388 +07:00 [Information] Sending file. Request path: '"/main.js"'. Physical path: '"/Users/xhsiow/workspaces/HPHR/api/wwwroot/main.js"'
+2018-01-14 11:27:10.728 +07:00 [Information] Finished handling request.
+2018-01-14 11:27:10.728 +07:00 [Information] Request finished in 340.124ms 200 application/javascript
+2018-01-14 11:27:10.967 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/api/employees  
+2018-01-14 11:27:10.967 +07:00 [Information] Handling request: /api/employees
+2018-01-14 11:27:10.968 +07:00 [Information] Successfully validated the token.
+2018-01-14 11:27:10.968 +07:00 [Information] AuthenticationScheme: "Bearer" was successfully authenticated.
+2018-01-14 11:27:10.968 +07:00 [Information] Executing action method "HPHR.API.Controllers.EmployeesController.Get (api)" with arguments (null) - ModelState is Valid
+2018-01-14 11:27:10.969 +07:00 [Information] Entity Framework Core "2.0.1-rtm-125" initialized '"DefaultDbContext"' using provider '"Npgsql.EntityFrameworkCore.PostgreSQL"' with options: "None"
+2018-01-14 11:27:10.974 +07:00 [Information] Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT \"emp\".\"id\", \"contact\".\"first_name\" AS \"FirstName\", \"contact\".\"last_name\" AS \"LastName\", \"contact\".\"email\", \"contact\".\"official_email\" AS \"OfficialEmail\", \"contact\".\"phone\", \"contact\".\"mobile_phone\" AS \"MobilePhone\", \"emp\".\"is_under_probation\" AS \"IsUnderProbation\", \"empType\".\"name\" AS \"EmployeeType\", \"designation\".\"name\" AS \"Designation\", UPPER(\"status\".\"code\") AS \"EmployeeStatus\", \"status\".\"code\"
+FROM \"employees\" AS \"emp\"
+INNER JOIN \"contacts\" AS \"contact\" ON \"emp\".\"contact_id\" = \"contact\".\"id\"
+INNER JOIN \"employee_types\" AS \"empType\" ON \"emp\".\"employee_type_id\" = \"empType\".\"id\"
+INNER JOIN \"designations\" AS \"designation\" ON \"emp\".\"designation_id\" = \"designation\".\"id\"
+INNER JOIN \"employee_statuses\" AS \"status\" ON \"emp\".\"employee_status_id\" = \"status\".\"id\"
+WHERE \"status\".\"code\" <> 'Deleted'
+ORDER BY \"LastName\""
+2018-01-14 11:27:10.975 +07:00 [Information] Executing ObjectResult, writing value "Microsoft.AspNetCore.Mvc.ControllerContext".
+2018-01-14 11:27:10.975 +07:00 [Information] Executed action "HPHR.API.Controllers.EmployeesController.Get (api)" in 6.725ms
+2018-01-14 11:27:10.975 +07:00 [Information] Finished handling request.
+2018-01-14 11:27:10.975 +07:00 [Information] Request finished in 8.396ms 200 application/json; charset=utf-8
+2018-01-14 11:27:11.018 +07:00 [Information] Request starting HTTP/1.1 GET http://localhost:5000/__webpack_hmr  
+2018-01-14 11:27:25.263 +07:00 [Information] Received SIGINT. Waiting for .NET process to exit...
+2018-01-14 11:27:30.258 +07:00 [Information] Request finished in 19239.863ms 200 text/event-stream; charset=utf-8
